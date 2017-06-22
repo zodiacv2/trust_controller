@@ -1,0 +1,6 @@
+NavfnROS:
+  transform_tolerance: 0.7
+  allow_unknown: true
+  default_tolerance: 2.0
+  visualize_potential: false #uses point cloud 2 to visualize
+  

@@ -1,0 +1,17 @@
+transform_tolerance: 1.0 #default 0.3
+#publish_voxel_map: true
+#save_debug_pgm: true  # saves to ~/.ros
+
+obstacle_range: 2.5
+raytrace_range: 3.0
+footprint: [[-0.44, -0.32], [0.56, -0.32], [0.56,0.32],[-0.44, 0.32]]
+#robot_radius: ir_of_robot
+inflation_radius: 3.0
+
+observation_sources: laser_scan_sensor1 laser_scan_sensor2
+
+laser_scan_sensor1: {sensor_frame: base_laser_link0, data_type: LaserScan, topic: scan_sick, marking: false , clearing: false, expected_update_rate: 5}
+
+laser_scan_sensor2: {sensor_frame: base_laser_link1 , data_type: LaserScan, topic: scan_urg , marking: false, clearing: false, expected_update_rate: 5}
+
+#point_cloud_sensor: {sensor_frame: frame_name, data_type: PointCloud, topic: topic_name, marking: true, clearing: true}

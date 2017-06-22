@@ -1,0 +1,45 @@
+<launch>
+  <arg name="initial_x" default="0.0"/>
+  <arg name="initial_y" default="0.0"/>
+  <arg name="initial_a" default="1.57"/>
+  
+  <master auto="start"/>
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find trust_controller)/map/3rdfloor.png 0.05" />
+
+  <!--include file="$(find amcl)/examples/amcl_diff.launch" -->
+
+  <node pkg="amcl" type="amcl" name="amcl" respawn="true">
+    <remap from="scan" to="scan_input" />
+    <param name="initial_pose_x" value="$(arg initial_x)"/>
+    <param name="initial_pose_y" value="$(arg initial_y)"/>
+    <param name="initial_pose_a" value="$(arg initial_a)"/>
+    <param name="odom_model_type" value="diff"/>
+    <param name="laser_max_beams" value="30"/>
+    <param name="min_particles" value="500"/>
+    <param name="max_particles" value="5000"/>
+    <param name="odom_alpha1" value="0.2"/>
+    <param name="odom_alpha2" value="0.2"/>
+    <param name="odom_alpha3" value="0.8"/>
+    <param name="odom_alpha4" value="0.2"/>
+    <param name="odom_alpha5" value="0.1"/>
+    <param name="laser_model_type" value="beam"/> 
+    <param name="odom_frame_id" value="odom"/>
+    <param name="recovery_alpha_slow" value="0.0"/>
+    <param name="recovery_alpha_fast" value="0.0"/>
+    <param name="use_map_topic" value="true"/>
+    <param name="first_map_only" value="true"/>
+  </node>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <remap from="cmd_vel" to="auto_vel"/>
+    <rosparam file="$(find trust_controller)/cfg/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find trust_controller)/cfg/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find trust_controller)/cfg/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find trust_controller)/cfg/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find trust_controller)/cfg/base_local_planner_params.yaml" command="load" />
+  </node>
+  <node pkg="trust_controller" type="trust_controller_node" name="trust_controller"></node>
+
+  <include file="$(find atrvjr_tf)/launch/atrvjr_tf_launch.launch"/>
+</launch>
